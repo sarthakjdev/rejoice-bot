@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: rejoice-postgres
+    image: postgres
+    environment:
+      - POSTGRES_USER=rejoice
+      - POSTGRES_DB=rejoice
+      - POSTGRES_PASSWORD=rejoice
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - "5431:5432"
+volumes:
+  data:
