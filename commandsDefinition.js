@@ -80,7 +80,7 @@ module.exports = [
                 type: 1,
             },
             {
-                name: 'resset-ranking',
+                name: 'reset-ranking',
                 description: ' to reset the whole ranking',
                 type: 1,
             },

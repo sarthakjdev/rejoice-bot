@@ -3,10 +3,7 @@ module.exports = {
     name: 'test',
     async exec(interaction) {
         await interaction.deferReply()
-        console.log(interaction.guild.id)
-        const welcomeChannelId = await interaction.client.factory.getWelcomeChannel(interaction.guild.id)
-
-        await interaction.editReply(`${welcomeChannelId}`)
+        await interaction.editReply(`check console, testinig completed.`)
     }
 
 }

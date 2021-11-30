@@ -36,6 +36,16 @@ class Components {
         }
     }
 
+    static successEmbed(message) {
+        const embed = new MessageEmbed()
+        .setColor('GREEN')
+        .setDescription(`<:R_right:894842773197434921> **${message}**`)
+
+        return {
+            embeds: [embed]
+        }
+    }
+
     static errorEmbed(message) {
         return Util.embed().setDescription(`:x: **${message}**`)
     }

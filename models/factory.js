@@ -1,8 +1,6 @@
 const knex = require('../util/knex')
 const Guild = require('./guild')
-
 const GUILD_TABLE = 'public.guilds'
-
 
 class Factory {
     constructor (client){
@@ -16,21 +14,27 @@ class Factory {
      * @returns{Promise<Guild>}
      */
     async createGuild(id, ownerId) {
-        const owner_id = Number(ownerId)
-        const [dbGuild] = await knex(GUILD_TABLE).insert({ guildId: id , guildOwnerId: owner_id }).returning('*')
+        const [dbGuild] = await knex(GUILD_TABLE).insert({ guildId: id , guildOwnerId: ownerId }).returning('*')
         const guild = new Guild(dbGuild)
 
         return guild
     }
 
     /**
+     * Delete Guild
+     * @param{string} id
+     */
+    async deleteGuild(id) {
+        await knex(GUILD_TABLE).where({ guildId: id }).del()
+    }
+
+    /**
      * Get Welcome Channel (if any) 
      * @param {number} guildId 
-     * @returns {welcomeChannelId:number}
+     * @returns {number} welcomeChanelId | undefined
      */
     async getWelcomeChannel(guildId) {
-        const [dbGuild] = await knex(GUILD_TABLE).where({ guildId })
-        const guild = new Guild(dbGuild)
+        const guild = await this.getGuildById(guildId)
         const welcomeChannelId = await guild.welcomeChannel
 
         return welcomeChannelId
@@ -39,31 +43,30 @@ class Factory {
     /**
      * Set Welcome Channel
      * @param {number} guildId 
-     * @returns {welcomeChannelId:number}
+     * @param {number} welcomeChannelId
+     * @returns{Promise<Guild>}
      */
      async setWelcomeChannel(guildId, welcomeChannelId) {
         const [dbGuild] = await knex(GUILD_TABLE)
         .where({ guildId })
         .update({ welcomeChannelId })
         .returning('*')
-
         const guild = new Guild(dbGuild)
 
-        return welcomeChannelId
+        return guild
     }
 
-        /**
-     * 
+    /**
+     * Get db guild by Id
      * @param {number} guildId 
      * @returns{Promise<Guild>}
      */
-         async getGuild(guildId) {
+         async getGuildById(guildId) {
             const [dbGuild] = await knex(GUILD_TABLE).where({ guildId })
             const guild = new Guild(dbGuild)
 
             return guild
         }
-
 }
 
 module.exports = Factory
