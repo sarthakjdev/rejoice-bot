@@ -5,6 +5,7 @@ const color = process.env.COLOR
 
 class Components {
 
+    // owner info component: 
     static ownerInfo(owner){
         const ownerInfoComponent = new MessageEmbed()
         .setAuthor('Rejoice Bot', `${process.env.THUMBNAIL}`)
@@ -19,6 +20,7 @@ class Components {
         }
     }
 
+    // server info component: 
     static serverInfo(guild, owner){
         const adminInfoComponent = new MessageEmbed()
         .setAuthor('Rejoice Bot', `${process.env.THUMBNAIL}`)
@@ -30,12 +32,12 @@ class Components {
         .addField('Owner Name:', `${owner.user.username}`)
         .addField('Members:', `${guild.memberCount}`)
 
-
         return {
             embeds: [adminInfoComponent]
         }
     }
 
+    // success component:
     static successEmbed(message) {
         const embed = new MessageEmbed()
         .setColor('GREEN')
@@ -46,6 +48,7 @@ class Components {
         }
     }
 
+    // error component: 
     static errorEmbed(message) {
         return Util.embed().setDescription(`:x: **${message}**`)
     }

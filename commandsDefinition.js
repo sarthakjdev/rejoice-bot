@@ -8,19 +8,6 @@ module.exports = [
         description: 'welcome commands start or stop',
         options: [
             {
-                name: 'set-channel', 
-                description: 'set up a channel for welcome messages',
-                type: 1, 
-                options: [
-                    {
-                        name: 'channel',
-                        description: 'channel for welcome messages', 
-                        type: 'CHANNEL',
-                        required: true,
-                    }
-                ]
-            },
-            {
                 name: 'start',
                 description: 'start the welcoming of the server member',
                 type: 1,
@@ -43,6 +30,32 @@ module.exports = [
                 name: 'stop',
                 description: 'stop the welcoming of the server member',
                 type: 1,
+            },
+            {
+                name: 'set-channel', 
+                description: 'set up a channel for welcome messages',
+                type: 1, 
+                options: [
+                    {
+                        name: 'channel',
+                        description: 'channel for welcome messages', 
+                        type: 'CHANNEL',
+                        required: true,
+                    }
+                ]
+            },
+            {
+                name: 'set-time',
+                description: 'set up time for welcome messages to disappear',
+                type: 1,
+                options: [
+                    {
+                        name: 'time', 
+                        description: 'time in seconds',
+                        type: 'NUMBER',
+                        required: true
+                    }
+                ],
             },
         ],
         },

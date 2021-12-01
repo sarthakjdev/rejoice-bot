@@ -5,53 +5,94 @@ module.exports = {
     name: 'welcome',
 
     // Setting up the initial welcome message service along with tiimer : 
-    async startWelcome(interaction, client, guild) {
+    async startWelcome(interaction, client, guild, dbGuild) {
         const channelToSet = await interaction.options.get('channel').value
-        // const timeSpan = await interaction.otpions.get('time').value
-        const dbWelcomeChannel = await client.factory.getWelcomeChannel(guild.id)
-        if(dbWelcomeChannel) 
-        {
+        const timeSpan = await interaction.options.get('time')?.value
+        const dbWelcomeChannel = dbGuild.welcomeChannel // welcome channel for the guild as per the database
+        if(dbWelcomeChannel) { // if already a dbGuildChannel => service alredy enabled
             const embed = await Components.errorEmbed(`You have already enabled welcome service on <#${dbWelcomeChannel}>`)
-            return await interaction.editReply(embed)
-        } 
-        await client.factory.setWelcomeChannel(guild.id, channelToSet)
 
-        const welcomeChannel = await guild.channels.fetch(channelToSet)
+            return await interaction.editReply({embeds: [embed]})
+        } 
+        await client.factory.setWelcomeService(guild.id, channelToSet, timeSpan)
+
+        // fetching the welcome channel and then sending the notifiaction to it. 
+        const welcomeChannel = await guild.channels.fetch(channelToSet) 
         const welcomeChannelSetupEmbed = await Components.successEmbed(`<@${interaction.user.id}> channel has been set up as your welcome channel`)
         const message = await welcomeChannel.send(welcomeChannelSetupEmbed)
-
         const setupSuccessEmbed = await Components.successEmbed(`<@${interaction.user.id}>Congrats! Welcome service set up done!`)
+
         return interaction.editReply(setupSuccessEmbed)
 
        },
 
     // Setting up channel to send the welcome messages when a user joins a guild: 
-    async setChannel(interaction,client, guild){
+    async setChannel(interaction,client, guild, dbGuild){
         const channelToSet = await interaction.options.get('channel').value
-        await client.factory.setWelcomeChannel(guild.id, channelToSet)
+        const dbWelcomeChannel = dbGuild.welcomeChannel
+        if(!dbWelcomeChannel) {
+            const embed = Components.errorEmbed('Set up your welcome service first, only  then yuo can use this command to change or update the welcome channel. \n Thanks!')
+
+            return interaction.editReply({embeds: [embed]})
+        }
+        if(channelToSet == dbWelcomeChannel) {  // if new channel matches with the old one => same channel can't operate the query
+            const embed = Components.errorEmbed(`You have already configured <#${dbWelcomeChannel}> as your welcome channel! `)
+
+            return interaction.editReply({ embeds: [embed]})
+        }
+        await client.factory.updateWelcomeChannel(guild.id, channelToSet)
         const welcomeChannel = await guild.channels.fetch(channelToSet)
         await welcomeChannel.send('hello , this channel has been set up as your welcome channel')
 
-        return interaction.editReply('welcome channel set up')
+        const embed = Components.successEmbed('Successfully updated the welcome service.')
+        return interaction.editReply(embed)
     },
 
     // To stop the welcome messages 
-    async stopWelcome(interaction, client, guild){
-        await client.factory.setWelcomeChannel(guild.id, null)
+    async stopWelcome(interaction, client, guild, dbGuild){
 
-        return interaction.editReply('Your welcome service hs been stopped')
+        const dbWelcomeChannel = dbGuild.welcomeChannel
+        if(!dbWelcomeChannel) { // if no welcome channel in db => service not enabled, hence no stoppage
+            const embed = Components.errorEmbed(`You don't have welcome service enabled for your server!`)
+
+            return interaction.editReply({ embeds: [embed]})
+        }
+        await client.factory.setWelcomeService(guild.id, null, null)
+
+        const embed = Components.successEmbed('Successfully stopped the welcome service.')
+        return interaction.editReply(embed)
+    },
+
+    // setting up time in the db for welcome message being teamporrary
+    async setTime(interaction, client, guild, dbGuild){
+        const dbTimeSpan = dbGuild.welcomeTimeGap
+        const timeToSet = await interaction.options.get('time').value 
+         if(dbTimeSpan == timeToSet ) {
+            const embed = Components.errorEmbed(`Time for disappearing of welcome message is already been set up at ${dbTimeSpan} seconds! `)
+
+            return interaction.editReply({ embeds: [embed]})
+         }
+
+         await client.factory.updateTime(guild.id, timeToSet)
+
+         const embed = Components.successEmbed('Successfully updated the time!')
+         return interaction.editReply(embed)
+        
     },
 
     async exec(interaction) {
         const { client, guild } = interaction
         await interaction.deferReply()
+        const dbGuild = await client.factory.getGuildById(guild.id) // fetching the guild from the db
         switch (interaction.options.getSubcommand()) {
             case 'set-channel':
-                return this.setChannel(interaction,client, guild )
+                return this.setChannel(interaction,client, guild, dbGuild )
+            case 'set-time':
+                return this.setTime(interaction,client, guild, dbGuild)
             case 'start':
-                return this.startWelcome(interaction,client, guild)
+                return this.startWelcome(interaction,client, guild, dbGuild)
             case 'stop':
-                return this.stopWelcome(interaction,client, guild)
+                return this.stopWelcome(interaction,client, guild, dbGuild)
         }
     }
 

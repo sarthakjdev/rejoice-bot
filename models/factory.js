@@ -1,3 +1,4 @@
+const Components = require('../struct/components')
 const knex = require('../util/knex')
 const Guild = require('./guild')
 const GUILD_TABLE = 'public.guilds'
@@ -46,7 +47,23 @@ class Factory {
      * @param {number} welcomeChannelId
      * @returns{Promise<Guild>}
      */
-     async setWelcomeChannel(guildId, welcomeChannelId) {
+     async setWelcomeService(guildId, welcomeChannelId, wTimeSpan) {
+        const [dbGuild] = await knex(GUILD_TABLE)
+        .where({ guildId })
+        .update({ welcomeChannelId, wTimeSpan })
+        .returning('*')
+        const guild = new Guild(dbGuild)
+
+        return guild
+    }
+
+    /**
+     * Set Welcome Channel
+     * @param {number} guildId 
+     * @param {number} wTimeSpan
+     * @returns{Promise<Guild>}
+     */
+     async updateWelcomeChannel(guildId, welcomeChanelId) {
         const [dbGuild] = await knex(GUILD_TABLE)
         .where({ guildId })
         .update({ welcomeChannelId })
@@ -56,6 +73,22 @@ class Factory {
         return guild
     }
 
+     /**
+     * Set Welcome Channel
+     * @param {number} guildId 
+     * @param {number} wTimeSpan
+     * @returns{Promise<Guild>}
+     */
+         async updateTime(guildId, wTimeSpan) {
+            const [dbGuild] = await knex(GUILD_TABLE)
+            .where({ guildId })
+            .update({ wTimeSpan })
+            .returning('*')
+            const guild = new Guild(dbGuild)
+    
+            return guild
+        }
+
     /**
      * Get db guild by Id
      * @param {number} guildId 
@@ -63,6 +96,7 @@ class Factory {
      */
          async getGuildById(guildId) {
             const [dbGuild] = await knex(GUILD_TABLE).where({ guildId })
+            if(!dbGuild) console.log('No guild found in the db.');
             const guild = new Guild(dbGuild)
 
             return guild
