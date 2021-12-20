@@ -37,11 +37,23 @@ class Components {
         }
     }
 
+    static vipRole(roles){
+        const vipRoleComponent = new MessageEmbed()
+        .setAuthor('Rejoice Bot', `${process.env.THUMBNAIL}`)
+        .setColor(color)
+        .setThumbnail(process.env.THUMBNAIL)
+        .addField('VIP Roles', `${roles.map((role) => `<@${role}>`).join(`\n`)}`, true)
+
+        return {
+            embeds: [vipRoleComponent]
+        }
+    }
+
     // success component:
     static successEmbed(message) {
         const embed = new MessageEmbed()
         .setColor('GREEN')
-        .setDescription(`<:R_right:894842773197434921> **${message}**`)
+        .setDescription(`<:R_verify:915678098782052363> **${message}**`)
 
         return {
             embeds: [embed]
@@ -50,7 +62,21 @@ class Components {
 
     // error component: 
     static errorEmbed(message) {
-        return Util.embed().setDescription(`:x: **${message}**`)
+        return Util.embed().setDescription(`<:R_cross:915678807367757824> **${message}**`)
+    }
+
+    static leaderboard(users) {
+        const leaderboard = new MessageEmbed()
+        .setAuthor('Rejoice Bot', `${process.env.THUMBNAIL}`)
+        .setColor(color)
+        .setThumbnail(process.env.THUMBNAIL)
+        .setDescription(`**Leaderboard containing top 10 rankers of the guild**`)
+        .addField('RANK', `${Array.from({ length: users.length }, (y, x) => `\`${x + 1}\``).join(`\n`)}`, true)
+        .addField('USERS', `${users.map((user) => `<@${user.id}>`).join(`\n`)}`, true)
+
+        return {
+            embeds: [leaderboard]
+        }
     }
 }
 

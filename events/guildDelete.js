@@ -4,5 +4,5 @@ module.exports = async (client, guild) => {
     } catch (error) {
         console.log(error)
     }
-    }
+}
     

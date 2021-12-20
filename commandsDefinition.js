@@ -22,7 +22,6 @@ module.exports = [
                          name: 'time',
                          description: 'time frame for a message to disappear in seconds',
                          type: 'NUMBER',
-                         required: true,
                     },
                 ],
             },
@@ -76,6 +75,21 @@ module.exports = [
         description: 'provides ranking utility',
         options: [
             {
+                name: 'enable', 
+                description: 'setting up bot to start the ranking of the user',
+                type: 1,
+            },
+            {
+                name: 'disable',
+                description: 'disables the ranking system but sustains the rank points',
+                type: 1,
+            },
+            {
+                name: 'reset', 
+                description: 'reset the ranking for the guild, it will clear te rank of everyuser to zero', 
+                type: 1,
+            },
+            {
                 name: 'check',
                 description: 'check ranking in the server',
                 type: 1,
@@ -93,9 +107,55 @@ module.exports = [
                 type: 1,
             },
             {
-                name: 'reset-ranking',
-                description: ' to reset the whole ranking',
+                name: 'update',
+                description: 'updtae the user\'s to rank',
                 type: 1,
+                options: [
+                    {
+                        name: 'user',
+                        description: 'user whose rank to update',
+                        type: 'USER',
+                        required: true,
+                    },
+                    {
+                        name: 'rank',
+                        description: 'updated rank',
+                        type: 'NUMBER',
+                        required: true,
+                    }
+                ]
+            },
+        ],
+    },
+    {
+        name: 'vip', 
+        description: 'settiing up roles as vip, noone can tag them', 
+        options: [
+            {
+                name: 'add-vip',
+                description: 'setting up vip roles', 
+                type: 1, 
+                options: [
+                    {
+                        name: 'role',
+                        description: 'add the role you want to mark as vip',
+                        type: 'ROLE',
+                        required: 'true'
+                    },
+                ], 
+            },
+            {
+                name: 'remove-vip',
+                description: 'adding vip roles', 
+                type: 1, 
+                options: [
+                    {
+                        name: 'role',
+                        description: 'add the role you want to remove from vip',
+                        type: 'ROLE',
+                        required: 'true'
+                    },
+                ],
             },
         ],
     },

@@ -5,6 +5,8 @@ class Guild {
         this.welcomeChannel = data.welcomeChannelId
         this.joinedAt = data.joinedAt
         this.welcomeTimeGap = data.wTimeSpan
+        this.rankingStatus = data.rankingStatus
+        this.vipRoles = data.vipRoles
     }
 }
 
