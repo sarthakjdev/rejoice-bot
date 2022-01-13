@@ -47,46 +47,15 @@ class Factory {
 
     /**
    * Set Welcome Channel
-   * @param {number} guildId
-   * @param {number} welcomeChannelId
+   * @param {string} guildId
+   * @param {string} welcomeChannelId
+   * @param {string} wTimeSpan
    * @returns{Promise<Guild>}
    */
     async setWelcomeService(guildId, welcomeChannelId, wTimeSpan) {
         const [dbGuild] = await knex(GUILD_TABLE)
             .where({ guildId })
             .update({ welcomeChannelId, wTimeSpan })
-            .returning('*')
-        const guild = new Guild(dbGuild)
-
-        return guild
-    }
-
-    /**
-   * Set Welcome Channel
-   * @param {number} guildId
-   * @param {number} wTimeSpan
-   * @returns{Promise<Guild>}
-   */
-    async updateWelcomeChannel(guildId, welcomeChannelId) {
-        const [dbGuild] = await knex(GUILD_TABLE)
-            .where({ guildId })
-            .update({ welcomeChannelId })
-            .returning('*')
-        const guild = new Guild(dbGuild)
-
-        return guild
-    }
-
-    /**
-   * Set Welcome Channel
-   * @param {number} guildId
-   * @param {number} wTimeSpan
-   * @returns{Promise<Guild>}
-   */
-    async updateTime(guildId, wTimeSpan) {
-        const [dbGuild] = await knex(GUILD_TABLE)
-            .where({ guildId })
-            .update({ wTimeSpan })
             .returning('*')
         const guild = new Guild(dbGuild)
 
@@ -113,7 +82,6 @@ class Factory {
    * @returns {Promise<Guild>}
    */
     async updateRankingStatus(guildId, rankingStatus) {
-        console.log('guildId ', guildId)
         const [dbGuild] = await knex(GUILD_TABLE)
             .where({ guildId })
             .update({ rankingStatus })
@@ -154,6 +122,15 @@ class Factory {
     }
 
     /**
+     * Remove user from a guild
+     * @param {string} guildid
+     * @param {string} userId
+     */
+    async removeUser(guildid, userId) {
+        await knex(USER_TABLE).where({ id: userId, guildid }).del()
+    }
+
+    /**
    * Updating the user's rank
    * @param {string} guildId
    * @param {string} userId
@@ -190,11 +167,11 @@ class Factory {
      * @param {string} guildId
      * @returns {Promise<any[]>}
      */
-    async getLeaderboard(guildId) {
+    async getLeaderboard(guildId, limit) {
         const dbUsers = await knex(USER_TABLE)
             .where({ guildId })
             .orderBy('points', 'desc')
-            .limit(10)
+            .limit(limit)
 
         const users = dbUsers.map((u) => new User(u))
 
@@ -218,6 +195,36 @@ class Factory {
             .update({ vipRoles: vipRolesToInsert })
             .returning('*')
 
+        const guild = new Guild(dbGuild)
+
+        return guild
+    }
+
+    /**
+     * @param {Object} embedData
+     * @param {String} guildId
+     * @returns {Promise<Guild>}
+     */
+    async setWelcomeEmbed(embedData, guildId) {
+        const [dbGuild] = await knex(GUILD_TABLE)
+            .where({ guildId })
+            .update({ ...embedData })
+
+        return dbGuild
+    }
+
+    /**
+   * Set Star Board Service
+   * @param {string} guildId
+   * @param {string} starBoardChannelId
+   * @param {string} noOfReactions
+   * @returns{Promise<Guild>}
+   */
+    async setStarBoardService(guildId, starBoardChannelId, noOfReactions, starredEmoji) {
+        const [dbGuild] = await knex(GUILD_TABLE)
+            .where({ guildId })
+            .update({ starBoardChannelId, noOfReactions, starredEmoji })
+            .returning('*')
         const guild = new Guild(dbGuild)
 
         return guild

@@ -7,6 +7,14 @@ class Guild {
         this.welcomeTimeGap = data.wTimeSpan
         this.rankingStatus = data.rankingStatus
         this.vipRoles = data.vipRoles
+        this.starBoardChannel = data.starBoardChannelId
+        this.reactions = data.noOfReactions
+        this.starredEmoji = data.starredEmoji
+        this.embedColor = data.embedColorCode
+        this.embedDescription = data.embedDescription
+        this.embedTitle = data.embedTitle
+        this.embedThumbnail = data.embedThumbnail
+        this.embedBnner = data.embedBanner
     }
 }
 

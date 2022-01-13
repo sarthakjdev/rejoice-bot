@@ -77,6 +77,21 @@ class Components {
             embeds: [leaderboard],
         }
     }
+
+    static welcomeEmbed(guild, member) {
+        const welcomeEmbed = new MessageEmbed()
+            .setAuthor('Rejoice Bot', `${process.env.THUMBNAIL}`)
+            .setColor(guild.embedColor)
+            .setDescription(`**${guild.embedDescription}**`)
+            .setTitle(`<@${member.id}>`)
+
+        if (guild.embedBanner) welcomeEmbed.setImage(`${guild.embedBanner}`)
+        if (guild.embedThumbnail) welcomeEmbed.setImage(`${guild.embedThumbnail}`)
+
+        return {
+            embeds: [welcomeEmbed],
+        }
+    }
 }
 
 module.exports = Components

@@ -10,7 +10,7 @@ module.exports = async (client, member) => {
         const guild = await client.guilds.fetch(guildMember.guild.id)
         const welcomeChannel = await guild.channels.fetch(welcomeChannelId)
         if (welcomeChannel) {
-            const embed = Components.successEmbed('Thank for joining the server')
+            const embed = Components.welcomeEmbed(dbGuild, guildMember)
             const welcomeMessage = await welcomeChannel.send(embed)
             if (time) {
                 setTimeout(() => {

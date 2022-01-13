@@ -5,7 +5,9 @@ module.exports = {
     name: 'vip',
     async addVipRole(interaction, client, guild, dbGuild, newRoleId) {
         const dbVipRoles = dbGuild.vipRoles
-        const dbRolesArr = dbVipRoles.split(',')
+        let dbRolesArr
+        if (dbVipRoles) dbRolesArr = dbVipRoles.split(',')
+        else dbRolesArr = []
         if (dbRolesArr.includes(newRoleId)) {
             const errorEmbed = Components.errorEmbed('Role has already been marked as VIP')
 
@@ -23,6 +25,7 @@ module.exports = {
 
         return interaction.editReply(successEmbed)
     },
+
     async removeVipRole(interaction, client, guild, dbGuild, roleToRemove) {
         const dbVipRoles = dbGuild.vipRoles
         const dbRolesArr = dbVipRoles.split(',')
@@ -39,12 +42,29 @@ module.exports = {
 
         await interaction.editReply({ embed: [errorEmbed] })
     },
+
     async getVipRoles(interaction, dbGuild) {
         const vipRoles = dbGuild.vipRoles.split(',')
         const vipRoleComponent = await Components.vipRole(vipRoles)
 
         return interaction.editReply(vipRoleComponent)
     },
+
+    async clearVipRoles(interaction, client, guild, dbGuild) {
+        if (!dbGuild.vipRoles) {
+            const errorEmbed = await Components.errorEmbed('No role has been set to vip.')
+
+            await interaction.editReply({ embed: [errorEmbed] })
+        }
+        const rolesToUpdate = ''
+
+        await client.factory.setVipRoles(guild.id, rolesToUpdate)
+
+        const successEmbed = await Components.successEmbed('You vip role has been resetted.')
+
+        return interaction.editReply(successEmbed)
+    },
+
     async exec(interaction) {
         await interaction.deferReply()
         const { client, guild } = interaction
@@ -59,6 +79,8 @@ module.exports = {
                 return this.removeVipRole(interaction, client, guild, dbGuild, actionRole)
             case 'get-roles':
                 return this.getVipRoles(interaction, dbGuild)
+            case 'clear':
+                return this.clearVipRoles(interaction, client, guild, dbGuild)
             default:
                 return 'not implemented'
         }

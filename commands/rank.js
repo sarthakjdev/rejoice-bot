@@ -11,6 +11,7 @@ module.exports = {
 
         return interaction.editReply(successEmbed)
     },
+
     async disableRanking(interaction, client, guild) {
         await client.factory.updateRankingStatus(guild.id, false)
 
@@ -20,6 +21,7 @@ module.exports = {
 
         return interaction.editReply(successEmbed)
     },
+
     async resetRanking(interaction, client, guild) {
         await client.factory.resetRanking(guild.id)
 
@@ -27,12 +29,15 @@ module.exports = {
 
         return interaction.editReply(successEmbed)
     },
+
     async getLeaderboard(interaction, client, guild) {
-        const topRankers = await client.factory.getLeaderboard(guild.id)
+        const limit = interaction.options.get('top')?.value
+        const topRankers = await client.factory.getLeaderboard(guild.id, limit)
         const leaderboardComponent = await Components.leaderboard(topRankers)
 
         return interaction.editReply(leaderboardComponent)
     },
+
     async exec(interaction) {
         await interaction.deferReply()
         const { client, guild } = interaction

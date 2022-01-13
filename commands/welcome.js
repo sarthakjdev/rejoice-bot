@@ -39,7 +39,7 @@ module.exports = {
 
             return interaction.editReply({ embeds: [embed] })
         }
-        await client.factory.updateWelcomeChannel(guild.id, channelToSet)
+        await client.factory.setWelcomeService(guild.id, channelToSet, dbGuild.welcomeTimeGap)
         const welcomeChannel = await guild.channels.fetch(channelToSet)
         await welcomeChannel.send('hello , this channel has been set up as your welcome channel')
 
@@ -73,11 +73,43 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
 
-        await client.factory.updateTime(guild.id, timeToSet)
+        await client.factory.setWelcomeService(guild.id, dbGuild.welcomeChannel, timeToSet)
 
         const embed = Components.successEmbed('Successfully updated the time!')
 
         return interaction.editReply(embed)
+    },
+
+    // set welcome embed
+    async setWelcomeEmbed(interaction, client, guild) {
+        const embedColorCode = interaction.options.get('color')?.value
+        const embedTitle = interaction.options.get('title')?.value
+        const embedDescription = interaction.options.get('description')?.value
+        const embedThumbnail = interaction.options.get('thumbnail-link')?.value
+        const embedBanner = interaction.options.get('banner-link')?.value
+
+        const embedData = {
+            embedColorCode,
+            embedTitle,
+            embedDescription,
+            embedThumbnail,
+            embedBanner,
+        }
+
+        await client.factory.setWelcomeEmbed(embedData, guild.id)
+        const dbGuild = await client.factory.getGuildById(guild.id)
+
+        const sampleEmbed = await Components.welcomeEmbed(dbGuild)
+        const embedSetupDone = await Components.successEmbed('Your embed has been successfully set up. \n Test embed is here.')
+
+        interaction.reply({ embeds: [...sampleEmbed.embeds, ...embedSetupDone.embeds] })
+    },
+
+    // testing welcome embed
+    async testWelcomeEmbed(interaction, dbGuild) {
+        const welcomeEmbed = await Components.welcomeEmbed(dbGuild, interaction.user)
+
+        return interaction.editReply(welcomeEmbed)
     },
 
     async exec(interaction) {
@@ -89,10 +121,14 @@ module.exports = {
                 return this.setChannel(interaction, client, guild, dbGuild)
             case 'set-time':
                 return this.setTime(interaction, client, guild, dbGuild)
-            case 'start':
+            case 'enable':
                 return this.startWelcome(interaction, client, guild, dbGuild)
-            case 'stop':
+            case 'disable':
                 return this.stopWelcome(interaction, client, guild, dbGuild)
+            case 'set-welcome-embed':
+                return this.setWelcomeEmbed(interaction, client, guild)
+            case 'test':
+                return this.testWelcomeEmbed(interaction, dbGuild)
             default:
                 return 'not implented'
         }
