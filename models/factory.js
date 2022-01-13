@@ -69,7 +69,7 @@ class Factory {
    */
     async getGuildById(guildId) {
         const [dbGuild] = await knex(GUILD_TABLE).where({ guildId })
-        if (!dbGuild) console.log('No guild found in the db.')
+        if (!dbGuild) return undefined
         const guild = new Guild(dbGuild)
 
         return guild
