@@ -70,7 +70,7 @@ module.exports = {
         const { client, guild } = interaction
         const dbGuild = await client.factory.getGuildById(guild.id)
 
-        const actionRole = await interaction.options.get('role').value
+        const actionRole = await interaction.options.get('role')?.value
 
         switch (interaction.options.getSubcommand()) {
             case 'add-vip':
