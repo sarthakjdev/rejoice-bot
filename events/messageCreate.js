@@ -47,7 +47,7 @@ const verifyMessageMentions = async (client, guildId, message) => {
 }
 
 module.exports = async (client, message) => {
-// retrieving guild and user if from message
+    // retrieving guild and user if from message
     const guildId = await message.guildId
     const userId = await message.author.id
     // updating rank if needed :

@@ -12,6 +12,7 @@ class Util {
         err += extraArray
         err += `\nStack: ${error.stack}\n---\n=== End Error ===`
 
+        // eslint-disable-next-line no-console
         console.error(err)
     }
 }

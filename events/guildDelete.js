@@ -1,3 +1,4 @@
+// eslint-disable-next-line consistent-return
 module.exports = async (client, guild) => {
     try {
         await client.factory.deleteGuild(guild.id)
