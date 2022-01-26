@@ -35,7 +35,7 @@ class Factory {
 
     /**
    * Get Welcome Channel (if any)
-   * @param {number} guildId
+   * @param {string} guildId
    * @returns {number} welcomeChanelId | undefined
    */
     async getWelcomeChannel(guildId) {
@@ -64,7 +64,7 @@ class Factory {
 
     /**
    * Get db guild by Id
-   * @param {number} guildId
+   * @param {string} guildId
    * @returns{Promise<Guild>}
    */
     async getGuildById(guildId) {
@@ -77,7 +77,7 @@ class Factory {
 
     /**
    * Enable / disable ranking system
-   * @param {number} guildId
+   * @param {string} guildId
    * @param {boolean} rankingStatus
    * @returns {Promise<Guild>}
    */
@@ -85,7 +85,7 @@ class Factory {
         const [dbGuild] = await knex(GUILD_TABLE)
             .where({ guildId })
             .update({ rankingStatus })
-
+            .returning('*')
         const guild = new Guild(dbGuild)
 
         return guild
@@ -201,6 +201,35 @@ class Factory {
     }
 
     /**
+     * removing vip roles
+     * @param {string} guildId
+     * @param {string} vipRolesId
+     */
+    async removeVipRole(guildId, updatedRoles) {
+        const [dbGuild] = await knex(GUILD_TABLE)
+            .where({ guildId })
+            .update({ vipRoles: updatedRoles })
+            .returning('*')
+
+        const guild = new Guild(dbGuild)
+
+        return guild
+    }
+
+    /**
+     *  Clear the vip roles for a guild
+     * @param {string} guildId
+     * @returns {Promise<Guild>}
+     */
+    async clearVipRoles(guildId) {
+        const dbGuild = await knex(GUILD_TABLE).where({ guildId }).update({ vipRoles: null }).returning('*')
+
+        const guild = new Guild(dbGuild)
+
+        return guild
+    }
+
+    /**
      * @param {Object} embedData
      * @param {String} guildId
      * @returns {Promise<Guild>}
@@ -209,6 +238,7 @@ class Factory {
         const [dbGuild] = await knex(GUILD_TABLE)
             .where({ guildId })
             .update({ ...embedData })
+            .returning('*')
 
         return dbGuild
     }

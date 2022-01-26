@@ -21,46 +21,54 @@ module.exports = {
         const roleToInsert = newRoleId
         await client.factory.setVipRoles(guild.id, roleToInsert)
 
-        const successEmbed = await Components.successEmbed('Role has been marked as VIP')
+        const successEmbed = Components.successEmbed('Role has been marked as VIP')
 
         return interaction.editReply(successEmbed)
     },
 
     async removeVipRole(interaction, client, guild, dbGuild, roleToRemove) {
         const dbVipRoles = dbGuild.vipRoles
-        const dbRolesArr = dbVipRoles.split(',')
-        if (dbRolesArr.includes(roleToRemove)) {
-            const uppdatedRolesArr = dbVipRoles.filter((role) => role !== roleToRemove)
-            const rolesToUpdate = uppdatedRolesArr.join()
-            await client.factory.setVipRoles(guild.id, rolesToUpdate)
+        let dbRolesArr
+        if (dbVipRoles) dbRolesArr = dbVipRoles.split(',')
+        if (dbRolesArr && dbRolesArr.length === 1) {
+            await client.factory.clearVipRoles(guild.id)
+            dbRolesArr = []
+            const successEmbed = Components.successEmbed('Role has been removed from VIP.')
 
-            const successEmbed = await Components.successEmbed('Role has been removed from VIP.')
-
-            await interaction.editReply(successEmbed)
+            return interaction.editReply(successEmbed)
         }
-        const errorEmbed = await Components.errorEmbed('The role you are trying to remove is not a VIP role.')
 
-        await interaction.editReply({ embed: [errorEmbed] })
+        if (dbRolesArr && dbRolesArr.includes(roleToRemove)) {
+            const updatedRolesArr = dbRolesArr.filter((role) => role !== roleToRemove)
+            const rolesToUpdate = updatedRolesArr.join()
+            await client.factory.removeVipRole(guild.id, rolesToUpdate)
+
+            const successEmbed = Components.successEmbed('Role has been removed from VIP.')
+
+            return interaction.editReply(successEmbed)
+        }
+        const errorEmbed = Components.errorEmbed('The role you are trying to remove is not a VIP role.')
+
+        return interaction.editReply({ embeds: [errorEmbed] })
     },
 
     async getVipRoles(interaction, dbGuild) {
         const vipRoles = dbGuild.vipRoles.split(',')
-        const vipRoleComponent = await Components.vipRole(vipRoles)
+        const vipRoleComponent = Components.vipRole(vipRoles)
 
         return interaction.editReply(vipRoleComponent)
     },
 
     async clearVipRoles(interaction, client, guild, dbGuild) {
         if (!dbGuild.vipRoles) {
-            const errorEmbed = await Components.errorEmbed('No role has been set to vip.')
+            const errorEmbed = Components.errorEmbed('No role has been set to vip.')
 
-            await interaction.editReply({ embed: [errorEmbed] })
+            return interaction.editReply({ embeds: [errorEmbed] })
         }
-        const rolesToUpdate = ''
 
-        await client.factory.setVipRoles(guild.id, rolesToUpdate)
+        await client.factory.clearVipRoles(guild.id)
 
-        const successEmbed = await Components.successEmbed('You vip role has been resetted.')
+        const successEmbed = Components.successEmbed('You vip role has been resetted.')
 
         return interaction.editReply(successEmbed)
     },

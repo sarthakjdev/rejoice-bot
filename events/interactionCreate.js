@@ -1,13 +1,12 @@
 const { errorEmbed } = require('../struct/components')
 
-const admins = process.env.ADMINS.split(',')
-
 module.exports = async (client, interaction) => {
     if (!interaction.isCommand()) return
     const command = client.slashCommands.get(interaction.commandName)
     if (command) {
         try {
-            if (command.adminOnly && !admins.includes(interaction.user.id)) {
+            const isAdmin = await interaction.member.permissions.has('ADMINISTRATOR')
+            if (command.adminOnly && !isAdmin) {
                 const embed = errorEmbed('You\'re not allowed to use this command')
                 await interaction.reply({ embeds: [embed] })
             } else {

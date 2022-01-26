@@ -20,12 +20,12 @@ module.exports = class extends Client {
         this.loadSlashCommands()
         this.loadEventListeners()
         await this.login(process.env.TOKEN)
-        if (process.env.HOME_GUILD_ID) {
-            await (await this.guilds.fetch(process.env.HOME_GUILD_ID)).commands.set(commandsDefinition)
-        } else {
-            await this.application.fetch()
-            await this.application.commands.set(commandsDefinition)
-        }
+        // if (process.env.HOME_GUILD_ID) {
+        //     await (await this.guilds.fetch(process.env.HOME_GUILD_ID)).commands.set(commandsDefinition)
+        // } else {
+        await this.application.fetch()
+        await this.application.commands.set(commandsDefinition)
+        // }
     }
 
     loadSlashCommands() {

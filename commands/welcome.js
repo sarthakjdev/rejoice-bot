@@ -10,7 +10,7 @@ module.exports = {
         const timeSpan = await interaction.options.get('time')?.value
         const dbWelcomeChannel = dbGuild.welcomeChannel // welcome channel for the guild as per the database
         if (dbWelcomeChannel) { // if already a dbGuildChannel => service alredy enabled
-            const embed = await Components.errorEmbed(`You have already enabled welcome service on <#${dbWelcomeChannel}>`)
+            const embed = Components.errorEmbed(`You have already enabled welcome service on <#${dbWelcomeChannel}>`)
 
             return interaction.editReply({ embeds: [embed] })
         }
@@ -18,9 +18,9 @@ module.exports = {
 
         // fetching the welcome channel and then sending the notifiaction to it.
         const welcomeChannel = await guild.channels.fetch(channelToSet)
-        const welcomeChannelSetupEmbed = await Components.successEmbed(`<@${interaction.user.id}> channel has been set up as your welcome channel`)
+        const welcomeChannelSetupEmbed = Components.successEmbed(`<@${interaction.user.id}> channel has been set up as your welcome channel`)
         await welcomeChannel.send(welcomeChannelSetupEmbed)
-        const setupSuccessEmbed = await Components.successEmbed(`<@${interaction.user.id}>Congrats! Welcome service set up done!`)
+        const setupSuccessEmbed = Components.successEmbed(`<@${interaction.user.id}>Congrats! Welcome service set up done!`)
 
         return interaction.editReply(setupSuccessEmbed)
     },
@@ -99,15 +99,15 @@ module.exports = {
         await client.factory.setWelcomeEmbed(embedData, guild.id)
         const dbGuild = await client.factory.getGuildById(guild.id)
 
-        const sampleEmbed = await Components.welcomeEmbed(dbGuild)
-        const embedSetupDone = await Components.successEmbed('Your embed has been successfully set up. \n Test embed is here.')
+        const sampleEmbed = Components.welcomeEmbed(dbGuild)
+        const embedSetupDone = Components.successEmbed('Your embed has been successfully set up. \n Test embed is here.')
 
         interaction.reply({ embeds: [...sampleEmbed.embeds, ...embedSetupDone.embeds] })
     },
 
     // testing welcome embed
     async testWelcomeEmbed(interaction, dbGuild) {
-        const welcomeEmbed = await Components.welcomeEmbed(dbGuild, interaction.user)
+        const welcomeEmbed = Components.welcomeEmbed(dbGuild, interaction.user)
 
         return interaction.editReply(welcomeEmbed)
     },

@@ -9,7 +9,7 @@ module.exports = {
         const guild = await client.guilds.fetch(process.env.HOME_GUILD_ID)
         const owner = await guild.members.fetch(guild.ownerId)
 
-        const adminInfoComponent = await Components.ownerInfo(owner)
+        const adminInfoComponent = Components.ownerInfo(owner)
         await interaction.editReply(adminInfoComponent)
     },
 }

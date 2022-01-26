@@ -10,12 +10,12 @@ module.exports = {
         const numberOfReactions = await interaction.options.get('reactions')?.value
         const { dbStarBoardChannel } = dbGuild // starred channel for the guild as per the database
         if (dbStarBoardChannel) { // if already a dbGuildChannel => service alredy enabled
-            const embed = await Components.errorEmbed(`You have already enabled star board service on <#${dbStarBoardChannel}>`)
+            const embed = Components.errorEmbed(`You have already enabled star board service on <#${dbStarBoardChannel}>`)
 
             return interaction.editReply({ embeds: [embed] })
         }
         await client.factory.setStarBoardService(guild.id, channelToSet, numberOfReactions)
-        const setupSuccessEmbed = await Components.successEmbed(`<@${interaction.user.id}>Congrats! Welcome service set up done!`)
+        const setupSuccessEmbed = Components.successEmbed(`<@${interaction.user.id}>Congrats! Welcome service set up done!`)
 
         return interaction.editReply(setupSuccessEmbed)
     },

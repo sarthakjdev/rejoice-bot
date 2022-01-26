@@ -2,20 +2,30 @@ const Components = require('../struct/components')
 
 module.exports = {
     name: 'rank',
-    async enableRanking(interaction, client, guild) {
+    async enableRanking(interaction, client, guild, dbGuild) {
+        if (dbGuild.rankingStatus) {
+            const embed = Components.errorEmbed(`Rank service is already enabled`)
+
+            return interaction.editReply({ embeds: [embed] })
+        }
         await client.factory.updateRankingStatus(guild.id, true)
 
-        const successEmbed = await Components.successEmbed(
+        const successEmbed = Components.successEmbed(
             'Ranking mechanism has been enabled for your guild',
         )
 
         return interaction.editReply(successEmbed)
     },
 
-    async disableRanking(interaction, client, guild) {
+    async disableRanking(interaction, client, guild, dbGuild) {
+        if (dbGuild.rankingStatus) {
+            const embed = Components.errorEmbed(`Rank service is already disabled`)
+
+            return interaction.editReply({ embeds: [embed] })
+        }
         await client.factory.updateRankingStatus(guild.id, false)
 
-        const successEmbed = await Components.successEmbed(
+        const successEmbed = Components.successEmbed(
             'Ranking mechanism has been disabled for your guild',
         )
 
@@ -31,9 +41,9 @@ module.exports = {
     },
 
     async getLeaderboard(interaction, client, guild) {
-        const limit = interaction.options.get('top')?.value
+        const limit = interaction.options.get('top')?.value || 10
         const topRankers = await client.factory.getLeaderboard(guild.id, limit)
-        const leaderboardComponent = await Components.leaderboard(topRankers)
+        const leaderboardComponent = Components.leaderboard(topRankers)
 
         return interaction.editReply(leaderboardComponent)
     },
@@ -46,7 +56,7 @@ module.exports = {
             case 'enable':
                 return this.enableRanking(interaction, client, guild, dbGuild)
             case 'disable':
-                return this.disableRanking(interaction, client, guild)
+                return this.disableRanking(interaction, client, guild, dbGuild)
             case 'reset':
                 return this.resetRanking(interaction, client, guild)
             case 'leaderboard':

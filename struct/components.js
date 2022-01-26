@@ -92,6 +92,18 @@ class Components {
             embeds: [welcomeEmbed],
         }
     }
+
+    static starBoardEmbed(description) {
+        const starredEmbed = new MessageEmbed()
+            .setAuthor('Rejoice Bot', `${process.env.THUMBNAIL}`)
+            .setColor('YELLOW')
+            .setThumbnail(process.env.THUMBNAIL)
+            .setDescription(`${description}`)
+
+        return {
+            embeds: [starredEmbed],
+        }
+    }
 }
 
 module.exports = Components

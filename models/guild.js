@@ -9,7 +9,6 @@ class Guild {
         this.vipRoles = data.vipRoles
         this.starBoardChannel = data.starBoardChannelId
         this.reactions = data.noOfReactions
-        this.starredEmoji = data.starredEmoji
         this.embedColor = data.embedColorCode
         this.embedDescription = data.embedDescription
         this.embedTitle = data.embedTitle
