@@ -206,6 +206,11 @@ module.exports = [
                 description: 'clear the vip roles for the server',
                 type: 1,
             },
+            {
+                name: 'get-roles',
+                description: 'get the list of vip roles setup for this guild',
+                type: 1,
+            },
         ],
     },
     {

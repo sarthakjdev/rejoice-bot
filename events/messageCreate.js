@@ -40,6 +40,7 @@ const verifyMessageMentions = async (client, guildId, message) => {
         await vipRoles.map((role) => role === r)
     })
     if (roleExist.length !== 0) {
+        message.delete() // deletes the message if a vip memeber has been tagged in the message
         const embed = Components.errorEmbed('You can not tag a vip member')
 
         await channel.send({ embeds: [embed] })

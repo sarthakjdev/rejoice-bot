@@ -250,10 +250,10 @@ class Factory {
    * @param {string} noOfReactions
    * @returns{Promise<Guild>}
    */
-    async setStarBoardService(guildId, starBoardChannelId, noOfReactions, starredEmoji) {
+    async setStarBoardService(guildId, starBoardChannelId, noOfReactions) {
         const [dbGuild] = await knex(GUILD_TABLE)
             .where({ guildId })
-            .update({ starBoardChannelId, noOfReactions, starredEmoji })
+            .update({ starBoardChannelId, noOfReactions })
             .returning('*')
         const guild = new Guild(dbGuild)
 

@@ -93,11 +93,10 @@ class Components {
         }
     }
 
-    static starBoardEmbed(description) {
+    static starBoardEmbed(description, guild) {
         const starredEmbed = new MessageEmbed()
-            .setAuthor('Rejoice Bot', `${process.env.THUMBNAIL}`)
+            .setAuthor(`${guild.name}`, `${process.env.THUMBNAIL}`)
             .setColor('YELLOW')
-            .setThumbnail(process.env.THUMBNAIL)
             .setDescription(`${description}`)
 
         return {

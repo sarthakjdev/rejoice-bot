@@ -15,7 +15,7 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] })
         }
         await client.factory.setStarBoardService(guild.id, channelToSet, numberOfReactions)
-        const setupSuccessEmbed = Components.successEmbed(`<@${interaction.user.id}>Congrats! Welcome service set up done!`)
+        const setupSuccessEmbed = Components.successEmbed(`<@${interaction.user.id}>Congrats! Star board set up has been done!`)
 
         return interaction.editReply(setupSuccessEmbed)
     },
@@ -34,7 +34,7 @@ module.exports = {
 
             return interaction.editReply({ embeds: [embed] })
         }
-        await client.factory.setStarBoardService(guild.id, channelToSet, dbGuild.reactions, dbGuild.starredEmoji)
+        await client.factory.setStarBoardService(guild.id, channelToSet, dbGuild.reactions)
 
         const embed = Components.successEmbed('Successfully updated the star-board service.')
 
@@ -43,13 +43,13 @@ module.exports = {
 
     // To stop the welcome messages
     async stopStarBoard(interaction, client, guild, dbGuild) {
-        const dbStarBoardChannel = dbGuild.welcomeChannel
+        const dbStarBoardChannel = dbGuild.starBoardChannel
         if (!dbStarBoardChannel) { // if no welcome channel in db => service not enabled, hence no stoppage
             const embed = Components.errorEmbed(`You don't have star-board service enabled for your server!`)
 
             return interaction.editReply({ embeds: [embed] })
         }
-        await client.factory.setStarBoardService(guild.id, null, null, '930915453516255263')
+        await client.factory.setStarBoardService(guild.id, null, null)
 
         const embed = Components.successEmbed('Successfully stopped the star-board service.')
 
