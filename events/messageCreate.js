@@ -1,3 +1,7 @@
+/**
+ * messageCreate event of the rejoice discord bot trigerred when a new message is created in the guild
+ */
+
 const Components = require('../struct/components')
 
 const updatePoints = async (client, guildId, userId, message) => {
@@ -11,12 +15,12 @@ const updatePoints = async (client, guildId, userId, message) => {
     // check if the ranking system is enabled for the guild or not
     const rankingSystemStatus = dbGuild.rankingStatus
     if (!rankingSystemStatus) return
-    let existingPoints
+    let existingPoints = 0
     if (user) existingPoints = user.points
-    else existingPoints = 0
     const points = message.content.split('').filter((l) => l !== ' ').length / 100
     const pointsToUpdate = existingPoints + points
-    await client.factory.updatePoints(guildId, userId, pointsToUpdate)
+    const rank = Math.floor(pointsToUpdate / 1000)
+    await client.factory.updatePoints(guildId, userId, pointsToUpdate, rank)
 }
 
 const verifyMessageMentions = async (client, guildId, message) => {

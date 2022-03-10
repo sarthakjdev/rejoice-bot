@@ -1,3 +1,7 @@
+/**
+ * interactionCreate event of the rejoice discord bot, trigerred when a new interaction is created
+ */
+
 const { errorEmbed } = require('../struct/components')
 
 module.exports = async (client, interaction) => {

@@ -1,3 +1,7 @@
+/**
+ * rank command of the rejoice bot
+ */
+
 const Components = require('../struct/components')
 
 module.exports = {
@@ -48,6 +52,32 @@ module.exports = {
         return interaction.editReply(leaderboardComponent)
     },
 
+    async getRank(interaction, client, guild) {
+        const user = await interaction.options.get('user').value
+
+        const dbUser = await client.factory.getUser(guild.id, user)
+
+        const embed = Components.rankEmbed(dbUser, guild)
+
+        return interaction.editReply(embed)
+    },
+
+    async updateRank(interaction, client, guild) {
+        const userToUpdate = await interaction.options.get('user').value
+        const updatedRank = await interaction.options.get('rank').value
+
+        const pointsToUpdate = updatedRank * 2000
+
+        await client.factory.updatePoints(guild.id, userToUpdate, pointsToUpdate, updatedRank)
+        const dbUser = await client.factory.getUser(guild.id, userToUpdate)
+
+        const embed = Components.rankEmbed(dbUser, guild)
+        await interaction.channel.send(embed)
+        const successEmbed = Components.successEmbed('Successfully updated the users rank')
+
+        return interaction.editReply(successEmbed)
+    },
+
     async exec(interaction) {
         await interaction.deferReply()
         const { client, guild } = interaction
@@ -61,6 +91,10 @@ module.exports = {
                 return this.resetRanking(interaction, client, guild)
             case 'leaderboard':
                 return this.getLeaderboard(interaction, client, guild)
+            case 'check':
+                return this.getRank(interaction, client, guild, dbGuild)
+            case 'update':
+                return this.updateRank(interaction, client, guild)
             default:
                 return 'not implmented'
         }

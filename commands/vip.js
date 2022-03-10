@@ -1,3 +1,7 @@
+/**
+ * vip roles command of the rejoice bot
+ */
+
 const Components = require('../struct/components')
 
 module.exports = {
@@ -30,6 +34,11 @@ module.exports = {
         const dbVipRoles = dbGuild.vipRoles
         let dbRolesArr
         if (dbVipRoles) dbRolesArr = dbVipRoles.split(',')
+        if (!dbVipRoles || dbVipRoles === '') {
+            const errorEmbed = Components.errorEmbed('No vip role set up to remove')
+
+            return interaction.editReply({ embeds: [errorEmbed] })
+        }
         if (dbRolesArr && dbRolesArr.length === 1) {
             await client.factory.clearVipRoles(guild.id)
             dbRolesArr = []

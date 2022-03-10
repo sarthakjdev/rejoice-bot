@@ -137,10 +137,10 @@ class Factory {
    * @param {string} pointsToUpdate
    * @returns {Promise<User>}
    */
-    async updatePoints(guildId, userId, pointsToUpdate) {
+    async updatePoints(guildId, userId, pointsToUpdate, rank) {
         const [dbUser] = await knex(USER_TABLE)
             .where({ guildId, userId })
-            .update({ points: pointsToUpdate })
+            .update({ points: pointsToUpdate, rank })
             .returning('*')
         const user = new User(dbUser)
 
@@ -170,7 +170,7 @@ class Factory {
     async getLeaderboard(guildId, limit) {
         const dbUsers = await knex(USER_TABLE)
             .where({ guildId })
-            .orderBy('points', 'desc')
+            .orderBy('rank', 'desc')
             .limit(limit)
 
         const users = dbUsers.map((u) => new User(u))

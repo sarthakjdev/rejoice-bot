@@ -9,7 +9,7 @@ module.exports = [
         options: [
             {
                 name: 'enable',
-                description: 'start the welcoming of the server member',
+                description: 'start the welcome of the server member',
                 type: 1,
                 options: [
                     {
@@ -266,6 +266,18 @@ module.exports = [
                         required: true,
                     },
                 ],
+            },
+        ],
+    },
+    {
+        name: 'report-bug',
+        description: 'report a bug to the development team',
+        options: [
+            {
+                name: 'description',
+                description: 'description of the bug',
+                type: 'STRING',
+                required: true,
             },
         ],
     },

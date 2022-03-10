@@ -1,3 +1,7 @@
+/**
+ * welcome command of the rejoice bot
+ */
+
 const Components = require('../struct/components')
 
 module.exports = {

@@ -1,3 +1,6 @@
+/**
+ * guildMemberRemove event of the rejoice discord bot, trigerred when a user leaves a guild
+ */
 
 module.exports = async (client, member) => {
     try {

@@ -1,9 +1,12 @@
+/**
+ * star board command of the rejoice bot
+ */
+
 const Components = require('../struct/components')
 
 module.exports = {
     adminOnly: true,
     name: 'star-board',
-
     // Setting up the initial welcome message service along with tiimer :
     async startStarBoard(interaction, client, guild, dbGuild) {
         const channelToSet = await interaction.options.get('channel').value

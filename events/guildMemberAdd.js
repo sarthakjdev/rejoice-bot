@@ -1,3 +1,7 @@
+/**
+ * guildMemberAdd event of the rejoie discord bot, trigerred when a nw user joins a guild
+ */
+
 const Components = require('../struct/components')
 
 module.exports = async (client, member) => {

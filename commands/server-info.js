@@ -1,3 +1,7 @@
+/**
+ * server information command of the rejoice bot
+ */
+
 const Components = require('../struct/components')
 
 module.exports = {
@@ -6,7 +10,7 @@ module.exports = {
         const { client } = interaction
         await interaction.deferReply()
 
-        const guild = await client.guilds.fetch(process.env.HOME_GUILD_ID)
+        const guild = await client.guilds.fetch(interaction.guildId)
         const owner = await guild.members.fetch(guild.ownerId)
 
         const serverInfoComponent = Components.serverInfo(guild, owner)
