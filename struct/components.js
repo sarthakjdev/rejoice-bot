@@ -147,6 +147,34 @@ class Components {
             embeds: [embed],
         }
     }
+
+    static userProfileComponent(userData) {
+        const embed = new MessageEmbed()
+            .setAuthor(`Rejoice`, `${process.env.THUMBNAIL}`)
+            .setColor('GREEN')
+            .addField('Name', `${userData.name}`)
+            .addField('Description', `${userData.description}`)
+
+        if (userData.twitter) {
+            embed.addField('Twitter', `${userData.twitter}`)
+        }
+
+        if (userData.github) {
+            embed.addField('Github', `${userData.github}`)
+        }
+
+        if (userData.linkedin) {
+            embed.addField('Linkedin', `${userData.linkedin}`)
+        }
+
+        if (userData.instagram) {
+            embed.addField('Intagram', `${userData.instagram}`)
+        }
+
+        return {
+            embeds: [embed],
+        }
+    }
 }
 
 module.exports = Components

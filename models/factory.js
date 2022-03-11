@@ -1,9 +1,11 @@
 const knex = require('../util/knex')
 const Guild = require('./guild')
 const User = require('./user')
+const UserProfile = require('./userProfile')
 
 const GUILD_TABLE = 'public.guilds'
 const USER_TABLE = 'public.users'
+const PROFILE_TABLE = 'public.usersProfile'
 
 class Factory {
     constructor(client) {
@@ -258,6 +260,67 @@ class Factory {
         const guild = new Guild(dbGuild)
 
         return guild
+    }
+
+    /**
+     * Set Profile service for a guild
+     * @param {string} guildId
+     * @param {string} profileCommandsChannel
+     * @returns{Promise<Guild>}
+     */
+    async setProfileService(guildId, profileCommandsChannel) {
+        const [dbGuild] = await knex(GUILD_TABLE)
+            .where({ guildId })
+            .update({ profileCommandsChannel })
+            .returning('*')
+        const guild = new Guild(dbGuild)
+
+        return guild
+    }
+
+    /**
+     *  To create a new user profile
+     * @param {Object} data
+     * @returns{Promise<UserProfile>}
+     */
+    async createUserProfile(data) {
+        const [dbuserProfile] = await knex(PROFILE_TABLE)
+            .insert({ ...data })
+            .returning('*')
+
+        const userProfile = new UserProfile(dbuserProfile)
+
+        return userProfile
+    }
+
+    /**
+     * To get the user profile
+     * @param {string} id
+     * @returns{Promise<UserProfile>}
+     */
+    async getUserProfile(id) {
+        const [dbuserProfile] = await knex(PROFILE_TABLE)
+            .where({ id })
+        if (!dbuserProfile) return undefined
+        const userProfile = new UserProfile(dbuserProfile)
+
+        return userProfile
+    }
+
+    /**
+     *
+     * @param {Object} data
+     * @returns{Promise<UserProfile>}
+     */
+    async updateUserProfile(data) {
+        const [dbuserProfile] = await knex(PROFILE_TABLE)
+            .where({ id: data.id })
+            .update({ ...data })
+            .returning('*')
+
+        const userProfile = new UserProfile(dbuserProfile)
+
+        return userProfile
     }
 }
 

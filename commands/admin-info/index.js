@@ -2,7 +2,7 @@
  * admin information command of the rejoice bot
  */
 
-const Components = require('../struct/components')
+const Components = require('../../struct/components')
 
 module.exports = {
     name: 'admin-info',
@@ -17,3 +17,4 @@ module.exports = {
         await interaction.editReply(adminInfoComponent)
     },
 }
+

@@ -2,7 +2,7 @@
  * bug reporting command of the rejoice bot
  */
 
-const Components = require('../struct/components')
+const Components = require('../../struct/components')
 
 module.exports = {
     name: 'report-bug',
@@ -25,3 +25,4 @@ module.exports = {
         return interaction.editReply(successEmbed)
     },
 }
+

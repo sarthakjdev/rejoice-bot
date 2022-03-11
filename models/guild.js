@@ -14,6 +14,7 @@ class Guild {
         this.embedTitle = data.embedTitle
         this.embedThumbnail = data.embedThumbnail
         this.embedBnner = data.embedBanner
+        this.profileCommandsChannel = data.profileCommandsChannel
     }
 }
 

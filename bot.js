@@ -21,18 +21,18 @@ module.exports = class extends Client {
         this.loadEventListeners()
         await this.login(process.env.TOKEN)
         // if (process.env.HOME_GUILD_ID) {
-        //     await (await this.guilds.fetch(process.env.HOME_GUILD_ID)).commands.set(commandsDefinition)
+        await (await this.guilds.fetch(process.env.HOME_GUILD_ID)).commands.set(commandsDefinition)
         // } else {
-        await this.application.fetch()
-        await this.application.commands.set(commandsDefinition)
+        // await this.application.fetch()
+        // await this.application.commands.set(commandsDefinition)
         // }
     }
 
     loadSlashCommands() {
         const commands = readdirSync(path.join(__dirname, 'commands'))
         // eslint-disable-next-line no-restricted-syntax
-        for (const commandFile of commands) {
-            const command = require(`./commands/${commandFile}`)
+        for (const commandFolder of commands) {
+            const command = require(`./commands/${commandFolder}/index`)
             this.slashCommands.set(command.name, command)
         }
     }

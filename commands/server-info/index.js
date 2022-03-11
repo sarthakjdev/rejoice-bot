@@ -2,7 +2,7 @@
  * server information command of the rejoice bot
  */
 
-const Components = require('../struct/components')
+const Components = require('../../struct/components')
 
 module.exports = {
     name: 'server-info',
@@ -17,3 +17,4 @@ module.exports = {
         await interaction.editReply(serverInfoComponent)
     },
 }
+
