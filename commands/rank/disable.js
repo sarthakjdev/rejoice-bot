@@ -1,7 +1,7 @@
 const Components = require('../../struct/components')
 
 async function disableRanking(interaction, client, guild, dbGuild) {
-    if (dbGuild.rankingStatus) {
+    if (!dbGuild.rankingStatus) {
         const embed = Components.errorEmbed(`Rank service is already disabled`)
 
         return interaction.editReply({ embeds: [embed] })
