@@ -308,7 +308,7 @@ class Factory {
     }
 
     /**
-     *
+     * To update users profile
      * @param {Object} data
      * @returns{Promise<UserProfile>}
      */
@@ -321,6 +321,14 @@ class Factory {
         const userProfile = new UserProfile(dbuserProfile)
 
         return userProfile
+    }
+
+    /**
+     * To delete users profile
+     * @param {string} id
+     */
+    async deleteUserProfile(id) {
+        await knex(PROFILE_TABLE).where({ id }).del()
     }
 }
 

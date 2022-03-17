@@ -7,6 +7,7 @@ const disable = require('./disable')
 const update = require('./update')
 const getProfile = require('./getProfile')
 const create = require('./create')
+const deleteProfile = require('./delete')
 
 module.exports = {
     name: 'profile',
@@ -25,6 +26,8 @@ module.exports = {
                 return update(interaction, client, guild, dbGuild)
             case 'get':
                 return getProfile(interaction, client, guild, dbGuild)
+            case 'delete':
+                return deleteProfile(interaction, client, guild, dbGuild)
             default:
                 return 'not implented'
         }
