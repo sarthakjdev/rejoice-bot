@@ -40,7 +40,6 @@ class Components {
         const vipRoleComponent = new MessageEmbed()
             .setAuthor('Rejoice Bot', `${process.env.THUMBNAIL}`)
             .setColor(color)
-            .setThumbnail(process.env.THUMBNAIL)
             .addField('VIP Roles', `${roles.map((role) => `<@&${role}>`).join(`\n`)}`, true)
 
         return {
@@ -87,10 +86,10 @@ class Components {
 
         if (guild.embedBanner) welcomeEmbed.setImage(`${guild.embedBanner}`)
         if (guild.embedThumbnail) welcomeEmbed.setImage(`${guild.embedThumbnail}`)
-        const memberJoined = `@${member.id}`
+        const memberJoined = `<@${member.id}>`
 
         return {
-            content: [memberJoined],
+            content: memberJoined,
             embeds: [welcomeEmbed],
         }
     }
@@ -126,11 +125,12 @@ class Components {
         }
     }
 
-    static bugEmbed(description, guild) {
+    static bugEmbed(description, guild, invite) {
         const embed = new MessageEmbed()
             .setAuthor(`Rejoice`, `${process.env.THUMBNAIL}`)
             .setColor('YELLOW')
             .setDescription(`Bug has been reported from **${guild.name}** \n **Description:**  ${description}`)
+            .addField('Invite:', `https://discord.gg/${invite.code}`)
 
         return {
             embeds: [embed],
@@ -141,7 +141,7 @@ class Components {
         const embed = new MessageEmbed()
             .setAuthor(`Rejoice`, `${process.env.THUMBNAIL}`)
             .setColor('GREEN')
-            .setDescription(`Server: ${guild.name} \n Rank: ${user.rank} \n Current XP: ${user.points}`)
+            .setDescription(`**Server: ${guild.name} \n Rank: ${user.rank} \n Current XP: ${user.points}**`)
 
         return {
             embeds: [embed],
@@ -154,21 +154,20 @@ class Components {
             .setColor('GREEN')
             .addField('Name', `${userData.name}`)
             .addField('Description', `${userData.description}`)
-
         if (userData.twitter) {
-            embed.addField('Twitter', `${userData.twitter}`)
+            embed.addField('Twitter', `[${userData.twitter.split('/')[3]}](${userData.twitter})`)
         }
 
         if (userData.github) {
-            embed.addField('Github', `${userData.github}`)
+            embed.addField('Github', `[${userData.github.split('/')[3]}](${userData.github})`)
         }
 
         if (userData.linkedin) {
-            embed.addField('Linkedin', `${userData.linkedin}`)
+            embed.addField('Linkedin', `[${userData.linkedin.split('/')[3]}](${userData.linkedin})`)
         }
 
         if (userData.instagram) {
-            embed.addField('Intagram', `${userData.instagram}`)
+            embed.addField('Intagram', `[${userData.instagram.split('/')[3]}](${userData.instagram})`)
         }
 
         return {

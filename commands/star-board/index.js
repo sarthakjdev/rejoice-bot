@@ -27,6 +27,5 @@ module.exports = {
                 return 'not implented'
         }
     },
-
 }
 

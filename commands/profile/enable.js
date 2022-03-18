@@ -9,7 +9,7 @@ async function enableProfileFeature(interaction, client, guild, dbGuild) {
         return interaction.editReply({ embeds: [embed] })
     }
     await client.factory.setProfileService(guild.id, channelToSet)
-    const setupSuccessEmbed = Components.successEmbed(`<@${interaction.user.id}>Congrats! Welcome service set up done!`)
+    const setupSuccessEmbed = Components.successEmbed(`<@${interaction.user.id}>Congrats! profile service set up done!`)
 
     return interaction.editReply(setupSuccessEmbed)
 }

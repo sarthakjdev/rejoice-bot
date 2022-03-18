@@ -55,6 +55,12 @@ async function removeVipRole(interaction, client, guild, dbGuild, roleToRemove) 
 }
 
 async function getVipRoles(interaction, dbGuild) {
+    if (!dbGuild.vipRoles) {
+        const errorEmbed = Components.errorEmbed('No role has been set to vip.')
+
+        return interaction.editReply({ embeds: [errorEmbed] })
+    }
+
     const vipRoles = dbGuild.vipRoles.split(',')
     const vipRoleComponent = Components.vipRole(vipRoles)
 

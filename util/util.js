@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js')
 
 class Util {
     static embed() {
-        return new MessageEmbed().setColor('#125D98')
+        return new MessageEmbed().setColor('#ff2d38')
     }
 
     static errorPrint(error, extra = {}) {

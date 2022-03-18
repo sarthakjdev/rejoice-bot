@@ -1,9 +1,9 @@
 const Components = require('../../struct/components')
 
 async function getRank(interaction, client, guild) {
-    const user = await interaction.options.get('user').value
-
-    const dbUser = await client.factory.getUser(guild.id, user)
+    const user = await interaction.options.get('user')?.value
+    const userToFetch = user || interaction.user.id
+    const dbUser = await client.factory.getUser(guild.id, userToFetch)
 
     const embed = Components.rankEmbed(dbUser, guild)
 
@@ -23,7 +23,7 @@ async function updateRank(interaction, client, guild) {
     await interaction.channel.send(embed)
     const successEmbed = Components.successEmbed('Successfully updated the users rank')
 
-    return interaction.editReply(successEmbed)
+    return interaction.editReply({ content: `<@${userToUpdate}>`, ...successEmbed })
 }
 
 module.exports = {

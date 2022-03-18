@@ -16,7 +16,6 @@ module.exports = [
                         name: 'channel',
                         description: 'channel to welcome',
                         type: 'CHANNEL',
-                        channel_type: 'GUILD_TEXT',
                         required: true,
                     },
                     {

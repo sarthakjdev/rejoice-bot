@@ -43,11 +43,12 @@ const verifyMessageMentions = async (client, guildId, message) => {
     const roleExist = await rolesToCheck.filter(async (r) => {
         await vipRoles.map((role) => role === r)
     })
+
     if (roleExist.length !== 0) {
         message.delete() // deletes the message if a vip memeber has been tagged in the message
         const embed = Components.errorEmbed('You can not tag a vip member')
 
-        await channel.send({ embeds: [embed] })
+        await channel.send({ content: `<@${message.author.id}>`, embeds: [embed] })
     }
 }
 
@@ -55,6 +56,8 @@ module.exports = async (client, message) => {
     // retrieving guild and user if from message
     const guildId = await message.guildId
     const userId = await message.author.id
+
+    if (message.author.id === client.application.id) return
     // updating rank if needed :
     updatePoints(client, guildId, userId, message)
     // verifying mentions in the message :
